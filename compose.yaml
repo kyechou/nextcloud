@@ -14,15 +14,15 @@ services:
     environment:
       APACHE_PORT: 11000
       APACHE_IP_BINDING: 127.0.0.1
+      SKIP_DOMAIN_VALIDATION: true
       NEXTCLOUD_DATADIR: /mnt/ncdata
       NEXTCLOUD_MOUNT: /mnt/ # Allows nc to access host directory.
       NEXTCLOUD_MAX_TIME: 18000 # Upload time limit (sec).
-      # SKIP_DOMAIN_VALIDATION: false
   caddy:
     image: caddy:alpine
     restart: unless-stopped
     environment:
-      NC_DOMAIN: archvm-nextcloud.fell-ordinal.ts.net
+      - NC_DOMAIN
     volumes:
       - type: bind
         source: ./Caddyfile
@@ -44,9 +44,9 @@ services:
   tailscale:
     image: tailscale/tailscale:latest
     environment:
-      TS_HOSTNAME: archvm-nextcloud
-      TS_AUTH_KEY: tskey-client-kqW1oEMsqW11CNTRL-fuVDT9bsHLfxTf78Lt2qLfpyMp1uBE9Hh
-      TS_EXTRA_ARGS: --advertise-tags=tag:nextcloud
+      - TS_HOSTNAME
+      - TS_AUTH_KEY
+      - TS_EXTRA_ARGS
     init: true
     restart: unless-stopped
     volumes:
