@@ -1,3 +1,11 @@
-https://{$NC_DOMAIN}:443 {
+{$NC_DOMAIN}:443 {
     reverse_proxy nextcloud-aio-apache:11000
+}
+
+{$NC_DOMAIN}:8443 {
+    reverse_proxy nextcloud-aio-jellyfin:8096
+}
+
+{$NC_DOMAIN}:9980 {
+    reverse_proxy nextcloud-aio-collabora:9980
 }
