@@ -1,9 +1,19 @@
-{$NC_DOMAIN}:443, cloud.kychou.net {
+{$NC_DOMAIN}:443 {
     reverse_proxy nextcloud-aio-apache:11000
 }
 
-{$NC_DOMAIN}:8443, media.kychou.net {
+cloud.kychou.net {
+    reverse_proxy nextcloud-aio-apache:11000
+    tls internal
+}
+
+{$NC_DOMAIN}:8443 {
     reverse_proxy nextcloud-aio-jellyfin:8096
+}
+
+media.kychou.net {
+    reverse_proxy nextcloud-aio-jellyfin:8096
+    tls internal
 }
 
 {$NC_DOMAIN}:9980 {
