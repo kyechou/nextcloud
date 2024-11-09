@@ -2,9 +2,13 @@
 
 set -x
 
-docker stop $(docker ps -q)
+mapfile -t containers < <(docker ps --filter name=nextcloud-aio -q)
+docker stop "${containers[@]}"
 docker compose down --remove-orphans -v
-docker rm $(docker ps -a -q)
+
+mapfile -t containers < <(docker ps -a --filter name=nextcloud-aio -q)
+docker rm "${containers[@]}"
 docker compose down --remove-orphans -v
+
 docker volume prune -a
-sudo rm -rf /data/nextcloud /data/backup
+sudo rm -rf /data/nextcloud
