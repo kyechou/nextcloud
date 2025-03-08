@@ -22,7 +22,7 @@ services:
       AIO_COMMUNITY_CONTAINERS: "memories"
   jellyfin:
     image: jellyfin/jellyfin
-    restart: unless-stopped
+    restart: always
     container_name: nextcloud-aio-jellyfin
     volumes:
       - /data/nextcloud/jellyfin-config:/config
@@ -40,7 +40,7 @@ services:
       - 8096:8096/tcp # HTTP (no SSL)
   caddy:
     image: caddy:alpine
-    restart: unless-stopped
+    restart: always
     container_name: nextcloud-aio-caddy
     environment:
       - NC_DOMAIN
@@ -69,7 +69,7 @@ services:
       - TS_AUTH_KEY
       - TS_EXTRA_ARGS
     init: true
-    restart: unless-stopped
+    restart: always
     container_name: nextcloud-aio-tailscale
     volumes:
       - /dev/net/tun:/dev/net/tun
