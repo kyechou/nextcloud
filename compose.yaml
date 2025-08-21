@@ -45,22 +45,11 @@ services:
     environment:
       - NC_DOMAIN
     volumes:
-      - type: bind
-        source: ./Caddyfile
-        target: /etc/caddy/Caddyfile
-      - type: volume
-        source: caddy_certs
-        target: /certs
-      - type: volume
-        source: caddy_data
-        target: /data
-      - type: volume
-        source: caddy_config
-        target: /config
-      - type: volume
-        source: tailscale_sock
-        target: /var/run/tailscale/ # Mount the volume for /var/run/tailscale/tailscale.sock
-        read_only: true
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - /data/caddy/certs:/certs
+      - /data/caddy/data:/data
+      - /data/caddy/config:/config
+      - /data/tailscale/sock:/var/run/tailscale:ro # Mount the volume for /var/run/tailscale/tailscale.sock
     network_mode: service:tailscale
   tailscale:
     image: tailscale/tailscale:latest
@@ -73,12 +62,8 @@ services:
     container_name: nextcloud-aio-tailscale
     volumes:
       - /dev/net/tun:/dev/net/tun
-      - type: volume
-        source: tailscale
-        target: /var/lib/tailscale
-      - type: volume
-        source: tailscale_sock
-        target: /tmp
+      - /data/tailscale/var_lib_tailscale:/var/lib/tailscale
+      - /data/tailscale/sock:/tmp
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -87,16 +72,6 @@ services:
 volumes:
   nextcloud_aio_mastercontainer:
     name: nextcloud_aio_mastercontainer # This line cannot change.
-  caddy_certs:
-    name: caddy_certs
-  caddy_data:
-    name: caddy_data
-  caddy_config:
-    name: caddy_config
-  tailscale:
-    name: tailscale
-  tailscale_sock:
-    name: tailscale_sock
 networks:
   nextcloud-aio:
     name: nextcloud-aio

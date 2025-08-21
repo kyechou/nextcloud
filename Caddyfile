@@ -15,7 +15,3 @@ media.kychou.net {
     reverse_proxy nextcloud-aio-jellyfin:8096
     tls internal
 }
-
-{$NC_DOMAIN}:9980 {
-    reverse_proxy nextcloud-aio-collabora:9980
-}
