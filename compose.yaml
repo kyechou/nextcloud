@@ -14,12 +14,14 @@ services:
     environment:
       APACHE_PORT: 11000
       APACHE_IP_BINDING: 127.0.0.1
+      FULLTEXTSEARCH_JAVA_OPTIONS: "-Xms1024M -Xmx1024M"
       SKIP_DOMAIN_VALIDATION: true
       NEXTCLOUD_DATADIR: /data/nextcloud
       NEXTCLOUD_MOUNT: /data/
+      # NEXTCLOUD_UPLOAD_LIMIT: 16G
       NEXTCLOUD_MAX_TIME: 18000 # Upload time limit (sec).
+      NEXTCLOUD_MEMORY_LIMIT: 256M
       NEXTCLOUD_ENABLE_DRI_DEVICE: true # Allow hardware transcoding. only works if `/dev/dri` is present on the host.
-      AIO_COMMUNITY_CONTAINERS: "memories"
   jellyfin:
     image: jellyfin/jellyfin
     restart: always
