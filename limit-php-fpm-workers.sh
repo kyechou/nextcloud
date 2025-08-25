@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+set -xe
 
 name=nextcloud-aio-nextcloud
 file_name=/usr/local/etc/php-fpm.d/www.conf
