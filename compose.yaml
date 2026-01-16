@@ -14,14 +14,14 @@ services:
     environment:
       APACHE_PORT: 11000
       APACHE_IP_BINDING: 127.0.0.1
+      # APACHE_ADDITIONAL_NETWORK: frontend_net # Connect the apache container to an additional docker network.
       FULLTEXTSEARCH_JAVA_OPTIONS: "-Xms1024M -Xmx1024M"
-      SKIP_DOMAIN_VALIDATION: true
       NEXTCLOUD_DATADIR: /data/nextcloud
       NEXTCLOUD_MOUNT: /data/
-      # NEXTCLOUD_UPLOAD_LIMIT: 16G
       NEXTCLOUD_MAX_TIME: 18000 # Upload time limit (sec).
-      NEXTCLOUD_MEMORY_LIMIT: 256M
+      NEXTCLOUD_MEMORY_LIMIT: 512M
       NEXTCLOUD_ENABLE_DRI_DEVICE: true # Allow hardware transcoding. only works if `/dev/dri` is present on the host.
+      SKIP_DOMAIN_VALIDATION: true
   jellyfin:
     image: jellyfin/jellyfin
     restart: always
@@ -53,6 +53,22 @@ services:
       - /data/caddy/config:/config
       - /data/tailscale/sock:/var/run/tailscale:ro # Mount the volume for /var/run/tailscale/tailscale.sock
     network_mode: service:tailscale
+  caddy_open:
+    image: caddy:alpine
+    restart: always
+    container_name: nextcloud-aio-caddy-open
+    environment:
+      - NC_DOMAIN
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - /data/caddy_open/certs:/certs
+      - /data/caddy_open/data:/data
+      - /data/caddy_open/config:/config
+    networks:
+      - nextcloud-aio
+      - nextcloud-aio-open
+    ports:
+      - 0.0.0.0:443:443
   tailscale:
     image: tailscale/tailscale:latest
     environment:
@@ -81,3 +97,7 @@ networks:
     enable_ipv6: false
     driver_opts:
       com.docker.network.bridge.host_binding_ipv4: "127.0.0.1" # Harden AIO
+  nextcloud-aio-open:
+    name: nextcloud-aio-open
+    driver: bridge
+    enable_ipv6: false
